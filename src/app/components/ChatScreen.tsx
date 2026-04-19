@@ -14,7 +14,8 @@ export function ChatScreen({ doubtId, onBack }: ChatScreenProps) {
   const [doubtDetails, setDoubtDetails] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [isFinishing, setIsFinishing] = useState(false);
-  const [activeCall, setActiveCall] = useState(true); 
+  // Don't auto-launch call — wait until currentUser is confirmed loaded
+  const [activeCall, setActiveCall] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,6 +59,9 @@ export function ChatScreen({ doubtId, onBack }: ChatScreenProps) {
       .eq('doubt_id', doubtId)
       .order('created_at', { ascending: true });
     setMessages(msgs || []);
+
+    // Auto-launch video call once user is confirmed
+    if (user) setActiveCall(true);
   };
 
   const sendMessage = async () => {
@@ -120,13 +124,13 @@ export function ChatScreen({ doubtId, onBack }: ChatScreenProps) {
         </div>
       </div>
 
-      {/* Video Call Overlay */}
-      {activeCall && currentUser && (
+      {/* Video Call Overlay — only mount when currentUser is ready */}
+      {activeCall && currentUser?.id && (
         <div className="absolute inset-0 z-[60] bg-black">
           <VideoCallScreen 
             doubtId={doubtId}
             currentUserId={currentUser.id}
-            remoteName={doubtDetails?.student?.full_name || "Student"} 
+            remoteName={doubtDetails?.student?.full_name || 'Student'} 
             onEnd={() => setActiveCall(false)} 
           />
         </div>
