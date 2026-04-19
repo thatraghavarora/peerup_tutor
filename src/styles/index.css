@@ -1,0 +1,40 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* Hide scrollbar globally but keep functionality */
+* {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+*::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+body {
+    background-color: #f1f5f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+#root {
+    width: 100%;
+    max-width: 480px; /* Mobile width constraint on desktop */
+    min-height: 100vh;
+    background: white;
+    box-shadow: 0 0 50px rgba(0,0,0,0.05);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Ensure full screen on actual mobile devices */
+@media (max-width: 480px) {
+    #root {
+        max-width: 100%;
+        box-shadow: none;
+    }
+}
